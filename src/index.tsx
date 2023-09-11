@@ -13,7 +13,7 @@ declare global {
 
 const SpinnerIcon: QuarkElement[] = Array(12)
   .fill(null)
-  .map((_, index) => <i class={`qk-loading__line--${index+1}`} />);
+  .map((_, index) => <i class={`qk-loading__line qk-loading__line--${index+1}`} />);
 
 const CircleIcon = (
   <svg class={'qk-loading__circle'} viewBox="25 25 50 50">
@@ -68,8 +68,8 @@ class QuarkUiLoading extends QuarkElement {
         <div class={`'qk-loading__box' ${getClassNames({
           'qk-loading__box--inside': this.hasDefaultSlot
         })}`}>
-          <div class={`qk-loading__${this.type}`}>
-            <span class={`qk-loading__${this.type}--inner`}>{this.type === 'spinner' ? SpinnerIcon : CircleIcon}</span>
+          <div class={`qk-loading__spinner qk-loading__spinner--${this.type}`}>
+            <span class={`qk-loading__spinner--inner`}>{this.type === 'spinner' ? SpinnerIcon : CircleIcon}</span>
           </div>
         </div>
       </div>
