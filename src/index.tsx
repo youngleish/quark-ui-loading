@@ -25,7 +25,7 @@ const CircleIcon = (
 class QuarkUiLoading extends QuarkElement {
   /** 存在slot时，是否展示loading */
   @property({ type: Boolean })
-  loading = true
+  loading = false
   @property()
   type: LoadingType = 'circle'
   @property({ type: String })
@@ -43,17 +43,17 @@ class QuarkUiLoading extends QuarkElement {
   private handleShowLoadingFlag() {
     if (!this.hasDefaultSlot) {
       this.showLoadingFlag = true
+    } else {
+      this.showLoadingFlag = this.loading
     }
-    this.showLoadingFlag = this.loading
   }
   private loadingConfig = {
-    waves: 5,
+    wave: 5,
   }
 
   componentDidMount() {
     this.hasDefaultSlot = this.children.length > 0
     this.handleShowLoadingFlag();
-    console.log("dom loaded!", this.children.length, this.hasDefaultSlot,  this.showLoadingFlag)
   }
 
   render() {
@@ -67,19 +67,24 @@ class QuarkUiLoading extends QuarkElement {
           {this.loading && <div class='qk-loading__content__mask'></div>}
         </div>}
 
-        {this.showLoadingFlag && <div class={`'qk-loading__box' ${getClassNames({
-          'qk-loading__box--inside': this.hasDefaultSlot
+        {this.showLoadingFlag && <div class={`qk-loading__box ${getClassNames({
+          'qk-loading__box--center': this.hasDefaultSlot,
         })}`}>
-          <div class={`qk-loading__spinner qk-loading__spinner--${this.type}`}>
-            <span class={`qk-loading__spinner--inner`}>{this.type === 'spinner' ? SpinnerIcon : CircleIcon}</span>
-          </div>
 
+          {/* circle  and spinner */}
+          {['circle', 'spinner'].includes(this.type) && <div class={`qk-loading__spinner qk-loading__spinner--${this.type}`}>
+          {this.type === 'spinner' ? SpinnerIcon : CircleIcon}
+          </div>}
+
+          {/* wave */}
           {Object.keys(this.loadingConfig).map((item) => (
-            <div class={`qk-laoding__${item}`}>
-              {Array(this.loadingConfig[item]).fill(null).map((_, index) => (
-                <div class={`qk-loading__${item}__item qk-loading__${item}__item--${index+1}`}></div>
-              ))}
-            </div>
+            <>
+              {this.type === item && <div class={`qk-laoding__${item}`}>
+                {Array(this.loadingConfig[item]).fill(null).map((_, index) => (
+                  <div class={`qk-loading__${item}__line qk-loading__${item}__line--${index+1}`}></div>
+                ))}
+              </div>}
+            </>
           ))}
         </div>}
       </div>

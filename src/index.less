@@ -1,4 +1,7 @@
+@primary-color: #1890ff;
 .qk-loading {
+  position: relative;
+  display: inline-block;
 
   &__content {
     position: relative;
@@ -25,7 +28,7 @@
     height: 100%;
     flex-direction: column;
 
-    &__inside {
+    &--center {
       position: absolute;
       left: 50%;
       top: 0;
@@ -39,14 +42,19 @@
     display: flex;
     width: 30px;
     height: 30px;
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+    // display: inline-block;
+    // vertical-align: middle;
+    color: @primary-color;
+    animation: circle 0.8s linear infinite;
 
-    &--inner {
-      display: inline-block;
-      color: #1890ff;
-      animation: circle 1.8s linear infinite;
+    &--spinner {
+      animation-timing-function: steps(12);
     }
-
     &--circle {
+      animation-duration: 2s;
       svg {
         display: block;
         width: 100%;
@@ -75,16 +83,16 @@
       height: 25%;
       margin: 0 auto;
       background-color: currentColor;
-      border-radius: 40%;
-      content: '';
+      border-radius: 4px;
+      content: ' ';
     }
   }
 
   @keyframes circle {
-    from {
+    0% {
       transform: rotate(0deg);
     }
-    to {
+    100% {
       transform: rotate(360deg);
     }
   }
@@ -105,8 +113,41 @@
       stroke-dashoffset: -120;
     } 
   }
+
+  &__wave {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__line {
+      height: 100%;
+      display: inline-block;
+      background-color: @primary-color;
+      animation: 1.2s ease-in-out infinite wave;
+      width: 3px;
+      height: 16px;
+      margin-left: 3px; 
+      border-radius: 2px;
+
+      &--1 {
+        margin-left: 0;
+      };
+    }
+
+    @keyframes wave {
+      0%,
+      40%,
+      100% {
+        transform: scaleY(0.4);
+      }
+      20% {
+        transform: scaleY(1);
+      }
+    }
+  }
 }
 
+// spinner line style
 .gen-spinner(@n, @i: 1) when (@i =< @n) {
   .qk-loading__line--@{i} {
     transform: rotate(@i * 30deg);
@@ -115,3 +156,12 @@
   .gen-spinner(@n, (@i + 1));
 }
 .gen-spinner(12);
+
+// wave item style
+.gen-wave(@n, @i: 1) when(@i =< @n) {
+  .qk-loading__wave__line--@{i} {
+    animation-delay: -1.2s + (0.1 * @i);
+  } 
+  .gen-wave(@n, (@i + 1));
+} 
+.gen-wave(5);
