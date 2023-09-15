@@ -28,13 +28,22 @@ class QuarkUiLoading extends QuarkElement {
   loading = false
   @property()
   type: LoadingType = 'circle'
-  @property({ type: String })
+  @property()
   size: LoadingSize = 'normal'
+  @property({ type: String })
+  color = '#1890ff'
+  @property({ type: String })
+  description
 
   // 是否有默认插槽
   @state() hasDefaultSlot: boolean = false
+  // 是否有命名插槽description
+  @state() hasDescriptionSlot: boolean = false
+  // 是否展示description
+  @state() showDescriptionFlag: boolean = false
   // 是否展示loading
   @state() showLoadingFlag: boolean = false
+
   /** 
    * 处理是否展示loading
    * 1. 存在默认插槽时，根据props传入的loading决定是否加载loading
@@ -53,6 +62,8 @@ class QuarkUiLoading extends QuarkElement {
 
   componentDidMount() {
     this.hasDefaultSlot = this.children.length > 0
+    this.hasDescriptionSlot = this.querySelector('[slot="description"]') !== null
+    this.showDescriptionFlag = this.hasDescriptionSlot || this.description
     this.handleShowLoadingFlag();
   }
 
@@ -86,6 +97,11 @@ class QuarkUiLoading extends QuarkElement {
               </div>}
             </>
           ))}
+
+          {/* description */}
+          {this.showDescriptionFlag && <div class='qk-loading__description'>
+            <slot name='description'>{this.description}</slot>
+          </div>}
         </div>}
       </div>
     );
